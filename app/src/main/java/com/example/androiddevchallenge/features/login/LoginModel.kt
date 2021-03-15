@@ -1,8 +1,11 @@
 package com.example.androiddevchallenge.features.login
 
+import com.example.androiddevchallenge.features.home.HomeKey
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.zhuinden.simplestack.Backstack
 import com.zhuinden.simplestack.Bundleable
+import com.zhuinden.simplestack.History
+import com.zhuinden.simplestack.StateChange
 import com.zhuinden.statebundle.StateBundle
 import io.reactivex.Observable
 
@@ -24,7 +27,7 @@ class LoginModel(
     }
 
     fun onLoginClicked() {
-        // TODO
+        backstack.setHistory(History.of(HomeKey()), StateChange.REPLACE)
     }
 
     fun onSignupClicked() {

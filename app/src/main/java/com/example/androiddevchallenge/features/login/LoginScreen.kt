@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldColors
@@ -26,12 +27,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.androiddevchallenge.R
+import com.example.androiddevchallenge.core.theme.colorDarkBackground
 import com.example.androiddevchallenge.core.theme.colorLoginScreenLoginButtonLight
 import com.example.androiddevchallenge.core.theme.colorLoginScreenTextFieldBackgroundDark
 import com.example.androiddevchallenge.core.theme.colorLoginScreenTextFieldIndicatorLight
@@ -198,6 +201,10 @@ fun LoginScreen(
                             append("Sign up")
                             addStyle(SpanStyle(textDecoration = TextDecoration.Underline), 0, length)
                         },
+                        style = TextStyle(color = when {
+                            isDarkTheme -> taupe100
+                            else -> taupe800
+                        }),
                         onClick = {
                             onSignUpClicked()
                         },
@@ -226,13 +233,15 @@ fun LoginScreenLightPreview() {
 @Preview("Dark Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun LoginScreenDarkPreview() {
-    LoginScreen(
-        username = "Hello",
-        usernameChanged = {},
-        password = "World",
-        passwordChanged = {},
-        onLoginClicked = {},
-        onSignUpClicked = {},
-        isDarkTheme = true,
-    )
+    Surface(color = colorDarkBackground) {
+        LoginScreen(
+            username = "Hello",
+            usernameChanged = {},
+            password = "World",
+            passwordChanged = {},
+            onLoginClicked = {},
+            onSignUpClicked = {},
+            isDarkTheme = true,
+        )
+    }
 }
