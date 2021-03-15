@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.androiddevchallenge.core.theme.MyTheme
 import com.example.androiddevchallenge.features.login.LoginKey
+import com.example.androiddevchallenge.features.welcome.WelcomeKey
 import com.zhuinden.simplestack.AsyncStateChanger
 import com.zhuinden.simplestack.History
 import com.zhuinden.simplestack.navigator.Navigator
@@ -44,7 +45,7 @@ class MainActivity : BaseActivity() {
         val backstack = Navigator.configure()
             .setScopedServices(DefaultServiceProvider())
             .setStateChanger(AsyncStateChanger(composeStateChanger))  // <--
-            .install(this, androidContentFrame, History.of(LoginKey()))
+            .install(this, androidContentFrame, History.of(WelcomeKey()))
 
         setContent {
             BackstackProvider(backstack) {  // <--

@@ -50,7 +50,10 @@ val gray800 = Color(0xCC333333)
 val white150 = Color(0x26FFFFFF)
 val rust300 = Color(0xE1AFAF)
 val white800 = Color(0xCCFFFFFF)
-val colorLoginButtonLight = Color(0xFF313333)
+val colorLoginScreenLoginButtonLight = Color(0xFF313333)
+val colorWelcomeScreenSignUpButtonLight = Color(0xFF323232)
+val colorLoginScreenTextFieldBackgroundDark = Color(0xFF585858)
+val colorLoginScreenTextFieldIndicatorLight = Color(0xFF636362)
 
 val typography = Typography(
     h1 = TextStyle(

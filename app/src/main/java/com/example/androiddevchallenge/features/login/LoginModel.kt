@@ -28,7 +28,7 @@ class LoginModel(
     }
 
     fun onSignupClicked() {
-        // TODO
+        // no design provided
     }
 
     override fun toBundle(): StateBundle = StateBundle().apply {

@@ -13,16 +13,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldColors
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
@@ -30,12 +32,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.androiddevchallenge.R
-import com.example.androiddevchallenge.core.theme.colorLoginButtonLight
+import com.example.androiddevchallenge.core.theme.MyTheme
+import com.example.androiddevchallenge.core.theme.colorLoginScreenLoginButtonLight
+import com.example.androiddevchallenge.core.theme.colorLoginScreenTextFieldBackgroundDark
+import com.example.androiddevchallenge.core.theme.colorLoginScreenTextFieldIndicatorLight
+import com.example.androiddevchallenge.core.theme.gray800
 import com.example.androiddevchallenge.core.theme.gray900
 import com.example.androiddevchallenge.core.theme.shapes
 import com.example.androiddevchallenge.core.theme.taupe100
 import com.example.androiddevchallenge.core.theme.taupe800
 import com.example.androiddevchallenge.core.theme.white
+import com.example.androiddevchallenge.core.theme.white800
 
 @Composable
 fun LoginScreen(
@@ -91,6 +98,24 @@ fun LoginScreen(
             )
 
             TextField(
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = when {
+                        isDarkTheme -> white800
+                        else -> gray800
+                    },
+                    backgroundColor = when {
+                        isDarkTheme -> colorLoginScreenTextFieldBackgroundDark
+                        else -> white
+                    },
+                    focusedIndicatorColor = when {
+                        isDarkTheme -> white
+                        else -> colorLoginScreenTextFieldIndicatorLight
+                    },
+                    unfocusedIndicatorColor = when {
+                        isDarkTheme -> white
+                        else -> colorLoginScreenTextFieldIndicatorLight
+                    },
+                ),
                 modifier = Modifier
                     .height(56.dp)
                     .fillMaxWidth(),
@@ -104,6 +129,24 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             TextField(
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = when {
+                        isDarkTheme -> white800
+                        else -> gray800
+                    },
+                    backgroundColor = when {
+                        isDarkTheme -> colorLoginScreenTextFieldBackgroundDark
+                        else -> white
+                    },
+                    focusedIndicatorColor = when {
+                        isDarkTheme -> white
+                        else -> colorLoginScreenTextFieldIndicatorLight
+                    },
+                    unfocusedIndicatorColor = when {
+                        isDarkTheme -> white
+                        else -> colorLoginScreenTextFieldIndicatorLight
+                    },
+                ),
                 modifier = Modifier
                     .height(56.dp)
                     .fillMaxWidth(),
@@ -117,13 +160,16 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
+                shape = shapes.medium,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = when {
+                        isDarkTheme -> white
+                        else -> colorLoginScreenLoginButtonLight
+                    }
+                ),
                 modifier = Modifier
                     .height(72.dp)
-                    .fillMaxWidth()
-                    .background(shape = shapes.medium, color = when {
-                        isDarkTheme -> white
-                        else -> colorLoginButtonLight
-                    }),
+                    .fillMaxWidth(),
                 onClick = onLoginClicked
             ) {
                 Text(
@@ -163,9 +209,10 @@ fun LoginScreen(
     }
 }
 
-@Preview
+
+@Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
-fun LoginPreview() {
+fun LoginScreenLightPreview() {
     LoginScreen(
         username = "Hello",
         usernameChanged = {},
@@ -174,5 +221,19 @@ fun LoginPreview() {
         onLoginClicked = {},
         onSignUpClicked = {},
         isDarkTheme = false,
+    )
+}
+
+@Preview("Dark Theme", widthDp = 360, heightDp = 640)
+@Composable
+fun LoginScreenDarkPreview() {
+    LoginScreen(
+        username = "Hello",
+        usernameChanged = {},
+        password = "World",
+        passwordChanged = {},
+        onLoginClicked = {},
+        onSignUpClicked = {},
+        isDarkTheme = true,
     )
 }
