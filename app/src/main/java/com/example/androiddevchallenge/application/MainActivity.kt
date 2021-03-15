@@ -18,6 +18,8 @@ package com.example.androiddevchallenge.application
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
@@ -26,6 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.androiddevchallenge.core.theme.MyTheme
+import com.example.androiddevchallenge.core.theme.colorDarkBackground
+import com.example.androiddevchallenge.core.theme.white
 import com.example.androiddevchallenge.features.login.LoginKey
 import com.example.androiddevchallenge.features.welcome.WelcomeKey
 import com.zhuinden.simplestack.AsyncStateChanger
@@ -36,7 +40,7 @@ import com.zhuinden.simplestackcomposeintegration.core.BackstackProvider
 import com.zhuinden.simplestackextensions.navigatorktx.androidContentFrame
 import com.zhuinden.simplestackextensions.services.DefaultServiceProvider
 
-class MainActivity : BaseActivity() {
+class MainActivity: BaseActivity() {
     private val composeStateChanger = AnimatingComposeStateChanger() // <--
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +54,15 @@ class MainActivity : BaseActivity() {
         setContent {
             BackstackProvider(backstack) {  // <--
                 MyTheme {
-                    Box(Modifier.fillMaxSize()) {
-                        Surface(color = MaterialTheme.colors.background) {
+                    Surface(color = MaterialTheme.colors.background) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color = when {
+                                    isSystemInDarkTheme() -> colorDarkBackground
+                                    else -> white
+                                })
+                        ) {
                             composeStateChanger.RenderScreen()  // <--
                         }
                     }

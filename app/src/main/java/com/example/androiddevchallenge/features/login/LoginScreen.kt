@@ -32,7 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.androiddevchallenge.R
-import com.example.androiddevchallenge.core.theme.MyTheme
 import com.example.androiddevchallenge.core.theme.colorLoginScreenLoginButtonLight
 import com.example.androiddevchallenge.core.theme.colorLoginScreenTextFieldBackgroundDark
 import com.example.androiddevchallenge.core.theme.colorLoginScreenTextFieldIndicatorLight
