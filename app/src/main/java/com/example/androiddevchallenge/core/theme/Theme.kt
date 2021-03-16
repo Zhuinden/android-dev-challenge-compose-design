@@ -60,6 +60,7 @@ val colorHomeScreenTextFieldBackgroundDark = Color(0xFF585858)
 val colorHomeScreenTextFieldIndicatorLight = Color(0xFF636362)
 val colorHomeScreenCardBackgroundLight = Color(0xFFFDFCFB)
 val colorHomeScreenCardBackgroundDark = Color(0xFF535353)
+val colorHomeScreenFabCircleBackgroundLight = Color(0xFF323232)
 
 
 val typography = Typography(

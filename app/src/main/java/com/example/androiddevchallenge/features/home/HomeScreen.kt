@@ -1,14 +1,21 @@
 package com.example.androiddevchallenge.features.home
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,11 +27,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +52,7 @@ import com.example.androiddevchallenge.core.theme.black800
 import com.example.androiddevchallenge.core.theme.colorDarkBackground
 import com.example.androiddevchallenge.core.theme.colorHomeScreenCardBackgroundDark
 import com.example.androiddevchallenge.core.theme.colorHomeScreenCardBackgroundLight
+import com.example.androiddevchallenge.core.theme.colorHomeScreenFabCircleBackgroundLight
 import com.example.androiddevchallenge.core.theme.colorHomeScreenTextFieldBackgroundDark
 import com.example.androiddevchallenge.core.theme.colorHomeScreenTextFieldIndicatorLight
 import com.example.androiddevchallenge.core.theme.gray800
@@ -181,75 +191,162 @@ fun HomeScreen(
         }
     }
 
+    @Composable
+    fun BottomNavItem(
+        @DrawableRes indicatorImageLight: Int,
+        @DrawableRes indicatorImageDark: Int,
+        text: String,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(modifier = Modifier.size(18.dp), painter = painterResource(when {
+                isDarkTheme -> indicatorImageDark
+                else -> indicatorImageLight
+            }), contentDescription = null)
+
+            Text(
+                text = text,
+                color = when {
+                    isDarkTheme -> taupe100
+                    else -> taupe800
+                },
+                fontStyle = MaterialTheme.typography.caption.fontStyle
+            )
+        }
+    }
+
     Surface(color = when {
         isDarkTheme -> colorDarkBackground
         else -> taupe100
     }) {
-        val columnScrollState = rememberScrollState()
-        Column(modifier = Modifier.verticalScroll(columnScrollState)) {
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(all = 16.dp)
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 56.dp)
+        ) {
+            val columnScrollState = rememberScrollState()
+            Column(
+                modifier = Modifier.verticalScroll(columnScrollState)
             ) {
-                Column {
-                    TextField(
-                        colors = TextFieldDefaults.textFieldColors(
-                            textColor = when {
-                                isDarkTheme -> white800
-                                else -> gray800
-                            },
-                            backgroundColor = when {
-                                isDarkTheme -> colorHomeScreenTextFieldBackgroundDark
-                                else -> white
-                            },
-                            focusedIndicatorColor = when {
-                                isDarkTheme -> white
-                                else -> colorHomeScreenTextFieldIndicatorLight
-                            },
-                            unfocusedIndicatorColor = when {
-                                isDarkTheme -> white
-                                else -> colorHomeScreenTextFieldIndicatorLight
-                            },
-                        ),
-                        modifier = Modifier.fillMaxWidth(),
-                        value = searchText,
-                        leadingIcon = {
-                            Image(
-                                modifier = Modifier.size(18.dp),
-                                painter = painterResource(id = when {
-                                    isDarkTheme -> R.drawable.ic_baseline_search_white_24
-                                    else -> R.drawable.ic_baseline_search_black_24
-                                }), contentDescription = null)
-                        },
-                        placeholder = {
-                            Text("Search")
-                        },
-                        onValueChange = onSearchTextChanged)
+                Spacer(modifier = Modifier.height(40.dp))
 
-                    CategoryText(text = "FAVORITE COLLECTIONS")
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(all = 16.dp)
+                ) {
+                    Column {
+                        TextField(
+                            colors = TextFieldDefaults.textFieldColors(
+                                textColor = when {
+                                    isDarkTheme -> white800
+                                    else -> gray800
+                                },
+                                backgroundColor = when {
+                                    isDarkTheme -> colorHomeScreenTextFieldBackgroundDark
+                                    else -> white
+                                },
+                                focusedIndicatorColor = when {
+                                    isDarkTheme -> white
+                                    else -> colorHomeScreenTextFieldIndicatorLight
+                                },
+                                unfocusedIndicatorColor = when {
+                                    isDarkTheme -> white
+                                    else -> colorHomeScreenTextFieldIndicatorLight
+                                },
+                            ),
+                            modifier = Modifier.fillMaxWidth(),
+                            value = searchText,
+                            leadingIcon = {
+                                Image(
+                                    modifier = Modifier.size(18.dp),
+                                    painter = painterResource(id = when {
+                                        isDarkTheme -> R.drawable.ic_baseline_search_white_24
+                                        else -> R.drawable.ic_baseline_search_black_24
+                                    }), contentDescription = null)
+                            },
+                            placeholder = {
+                                Text("Search")
+                            },
+                            onValueChange = onSearchTextChanged)
 
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    val scrollState = rememberScrollState()
-                    Column(modifier = Modifier.horizontalScroll(scrollState)) {
-                        GridCardRow(imageDatas = imagesGridFirstRow)
+                        CategoryText(text = "FAVORITE COLLECTIONS")
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        GridCardRow(imageDatas = imagesGridSecondRow)
-                    }
+                        val scrollState = rememberScrollState()
+                        Column(modifier = Modifier.horizontalScroll(scrollState)) {
+                            GridCardRow(imageDatas = imagesGridFirstRow)
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
 
-                    imagesCardRows.fastForEach { (title, imageDatas) ->
-                        CategoryText(text = title)
+                            GridCardRow(imageDatas = imagesGridSecondRow)
+                        }
 
-                        CircleImageRow(imageDatas)
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        imagesCardRows.fastForEach { (title, imageDatas) ->
+                            CategoryText(text = title)
+
+                            CircleImageRow(imageDatas)
+                        }
                     }
                 }
+            }
+        }
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter,
+        ) {
+            Row(
+                modifier = Modifier
+                    .height(56.dp)
+                    .fillMaxWidth()
+                    .offset(x = -24.dp) /* unknown displacement fix */,
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BottomNavItem(
+                    indicatorImageLight = R.drawable.ic_baseline_local_florist_selected_light_24,
+                    indicatorImageDark = R.drawable.ic_baseline_local_florist_selected_dark_24,
+                    text = "HOME"
+                )
+
+                BottomNavItem(
+                    indicatorImageLight = R.drawable.ic_baseline_face_unselected_light_24,
+                    indicatorImageDark = R.drawable.ic_baseline_face_unselected_dark_24,
+                    text = "PROFILE"
+                )
+            }
+
+            Column {
+                FloatingActionButton(
+                    modifier = Modifier.size(56.dp),
+                    backgroundColor = when {
+                        isDarkTheme -> white
+                        else -> colorHomeScreenFabCircleBackgroundLight
+                    },
+                    shape = CircleShape,
+                    onClick = {
+                    },
+                    content = {
+                        Image(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(id = when {
+                                isDarkTheme -> R.drawable.ic_baseline_play_arrow_24_dark
+                                else -> R.drawable.ic_baseline_play_arrow_24_light
+                            }),
+                            contentDescription = "Play",
+                        )
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(28.dp))
             }
         }
     }

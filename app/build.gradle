@@ -95,6 +95,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
 
     implementation "androidx.compose.runtime:runtime-rxjava2:$compose_version"
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.4.31'
 
     testImplementation 'junit:junit:4.13.2'
 
