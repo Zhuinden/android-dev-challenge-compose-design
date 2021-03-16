@@ -297,6 +297,8 @@ fun HomeScreen(
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
 
@@ -308,7 +310,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .height(56.dp)
                     .fillMaxWidth()
-                    .offset(x = -24.dp) /* unknown displacement fix */,
+                    .offset(x = -24.dp) /* why is this needed? */,
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {

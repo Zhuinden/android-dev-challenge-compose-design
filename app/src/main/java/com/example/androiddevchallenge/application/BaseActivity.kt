@@ -18,14 +18,4 @@ abstract class BaseActivity: AppCompatActivity() {
 
         makeStatusBarTransparent()
     }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-
-        ViewCompat.setOnApplyWindowInsetsListener(
-            (findViewById(Window.ID_ANDROID_CONTENT) as ViewGroup).getChildAt(0)
-        ) { _, insets ->
-            insets.consumeSystemWindowInsets()
-        }
-    }
 }

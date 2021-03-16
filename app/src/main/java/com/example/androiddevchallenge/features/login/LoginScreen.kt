@@ -58,6 +58,41 @@ fun LoginScreen(
     onSignUpClicked: () -> Unit,
     isDarkTheme: Boolean = isSystemInDarkTheme(),
 ) {
+    @Composable
+    fun LoginTextInput(
+        text: String,
+        textChanged: (String) -> Unit,
+    ) {
+        TextField(
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = when {
+                    isDarkTheme -> white800
+                    else -> gray800
+                },
+                backgroundColor = when {
+                    isDarkTheme -> colorLoginScreenTextFieldBackgroundDark
+                    else -> white
+                },
+                focusedIndicatorColor = when {
+                    isDarkTheme -> white
+                    else -> colorLoginScreenTextFieldIndicatorLight
+                },
+                unfocusedIndicatorColor = when {
+                    isDarkTheme -> white
+                    else -> colorLoginScreenTextFieldIndicatorLight
+                },
+            ),
+            modifier = Modifier
+                .height(56.dp)
+                .fillMaxWidth(),
+            value = username,
+            placeholder = {
+                Text(text)
+            },
+            onValueChange = textChanged
+        )
+    }
+
     Image(
         painter = painterResource(id = when {
             isDarkTheme -> R.drawable.dark_login
@@ -78,7 +113,9 @@ fun LoginScreen(
         val scrollState = rememberScrollState()
 
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
@@ -103,65 +140,11 @@ fun LoginScreen(
                     .height(32.dp)
             )
 
-            TextField(
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = when {
-                        isDarkTheme -> white800
-                        else -> gray800
-                    },
-                    backgroundColor = when {
-                        isDarkTheme -> colorLoginScreenTextFieldBackgroundDark
-                        else -> white
-                    },
-                    focusedIndicatorColor = when {
-                        isDarkTheme -> white
-                        else -> colorLoginScreenTextFieldIndicatorLight
-                    },
-                    unfocusedIndicatorColor = when {
-                        isDarkTheme -> white
-                        else -> colorLoginScreenTextFieldIndicatorLight
-                    },
-                ),
-                modifier = Modifier
-                    .height(56.dp)
-                    .fillMaxWidth(),
-                value = username,
-                placeholder = {
-                    Text("Username")
-                },
-                onValueChange = usernameChanged
-            )
+            LoginTextInput(text = "Username", textChanged = usernameChanged)
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            TextField(
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = when {
-                        isDarkTheme -> white800
-                        else -> gray800
-                    },
-                    backgroundColor = when {
-                        isDarkTheme -> colorLoginScreenTextFieldBackgroundDark
-                        else -> white
-                    },
-                    focusedIndicatorColor = when {
-                        isDarkTheme -> white
-                        else -> colorLoginScreenTextFieldIndicatorLight
-                    },
-                    unfocusedIndicatorColor = when {
-                        isDarkTheme -> white
-                        else -> colorLoginScreenTextFieldIndicatorLight
-                    },
-                ),
-                modifier = Modifier
-                    .height(56.dp)
-                    .fillMaxWidth(),
-                value = password,
-                placeholder = {
-                    Text("Password")
-                },
-                onValueChange = passwordChanged
-            )
+            LoginTextInput(text = "Password", textChanged = passwordChanged)
 
             Spacer(modifier = Modifier.height(8.dp))
 
