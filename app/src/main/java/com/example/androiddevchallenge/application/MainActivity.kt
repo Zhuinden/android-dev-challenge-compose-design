@@ -17,7 +17,6 @@ package com.example.androiddevchallenge.application
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -30,7 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.androiddevchallenge.core.theme.MyTheme
 import com.example.androiddevchallenge.core.theme.colorDarkBackground
 import com.example.androiddevchallenge.core.theme.white
-import com.example.androiddevchallenge.features.login.LoginKey
 import com.example.androiddevchallenge.features.welcome.WelcomeKey
 import com.zhuinden.simplestack.AsyncStateChanger
 import com.zhuinden.simplestack.History
@@ -40,7 +38,7 @@ import com.zhuinden.simplestackcomposeintegration.core.BackstackProvider
 import com.zhuinden.simplestackextensions.navigatorktx.androidContentFrame
 import com.zhuinden.simplestackextensions.services.DefaultServiceProvider
 
-class MainActivity: BaseActivity() {
+class MainActivity : BaseActivity() {
     private val composeStateChanger = AnimatingComposeStateChanger() // <--
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,22 +46,24 @@ class MainActivity: BaseActivity() {
 
         val backstack = Navigator.configure()
             .setScopedServices(DefaultServiceProvider())
-            .setStateChanger(AsyncStateChanger(composeStateChanger))  // <--
+            .setStateChanger(AsyncStateChanger(composeStateChanger)) // <--
             .install(this, androidContentFrame, History.of(WelcomeKey()))
 
         setContent {
-            BackstackProvider(backstack) {  // <--
+            BackstackProvider(backstack) { // <--
                 MyTheme {
                     Surface(color = MaterialTheme.colors.background) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .background(color = when {
-                                    isSystemInDarkTheme() -> colorDarkBackground
-                                    else -> white
-                                })
+                                .background(
+                                    color = when {
+                                        isSystemInDarkTheme() -> colorDarkBackground
+                                        else -> white
+                                    }
+                                )
                         ) {
-                            composeStateChanger.RenderScreen()  // <--
+                            composeStateChanger.RenderScreen() // <--
                         }
                     }
                 }
@@ -78,12 +78,10 @@ class MainActivity: BaseActivity() {
     }
 }
 
-
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun LightPreview() {
     MyTheme {
-
     }
 }
 
@@ -91,6 +89,5 @@ fun LightPreview() {
 @Composable
 fun DarkPreview() {
     MyTheme(darkTheme = true) {
-
     }
 }

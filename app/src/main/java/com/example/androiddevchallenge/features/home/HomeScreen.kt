@@ -1,3 +1,18 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.androiddevchallenge.features.home
 
 import androidx.annotation.DrawableRes
@@ -43,7 +58,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.*
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.fastMaxBy
 import coil.request.ImageRequest
 import coil.size.PixelSize
 import com.example.androiddevchallenge.R
@@ -131,10 +148,13 @@ fun HomeScreen(
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = imageData.title, fontStyle = MaterialTheme.typography.h3.fontStyle, color = when {
-                    isDarkTheme -> white800
-                    else -> black800
-                })
+                Text(
+                    text = imageData.title, fontStyle = MaterialTheme.typography.h3.fontStyle,
+                    color = when {
+                        isDarkTheme -> white800
+                        else -> black800
+                    }
+                )
             }
         }
     }
@@ -166,10 +186,13 @@ fun HomeScreen(
                     .height(24.dp),
                 contentAlignment = Alignment.BottomCenter,
             ) {
-                Text(text = imageData.title, fontStyle = MaterialTheme.typography.h3.fontStyle, color = when {
-                    isDarkTheme -> white800
-                    else -> black800
-                })
+                Text(
+                    text = imageData.title, fontStyle = MaterialTheme.typography.h3.fontStyle,
+                    color = when {
+                        isDarkTheme -> white800
+                        else -> black800
+                    }
+                )
             }
         }
     }
@@ -218,16 +241,22 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(modifier = Modifier.size(18.dp), painter = painterResource(when {
-                isDarkTheme -> when {
-                    isSelected -> selectedIndicatorImageDark
-                    else -> unselectedIndicatorImageDark
-                }
-                else -> when {
-                    isSelected -> selectedIndicatorImageLight
-                    else -> unselectedIndicatorImageLight
-                }
-            }), contentDescription = null)
+            Image(
+                modifier = Modifier.size(18.dp),
+                painter = painterResource(
+                    when {
+                        isDarkTheme -> when {
+                            isSelected -> selectedIndicatorImageDark
+                            else -> unselectedIndicatorImageDark
+                        }
+                        else -> when {
+                            isSelected -> selectedIndicatorImageLight
+                            else -> unselectedIndicatorImageLight
+                        }
+                    }
+                ),
+                contentDescription = null
+            )
 
             Text(
                 text = text,
@@ -240,13 +269,16 @@ fun HomeScreen(
         }
     }
 
-    Surface(color = when {
-        isDarkTheme -> colorDarkBackground
-        else -> taupe100
-    }) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 56.dp)
+    Surface(
+        color = when {
+            isDarkTheme -> colorDarkBackground
+            else -> taupe100
+        }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 56.dp)
         ) {
             val columnScrollState = rememberScrollState()
             Column(
@@ -284,15 +316,20 @@ fun HomeScreen(
                             leadingIcon = {
                                 Image(
                                     modifier = Modifier.size(18.dp),
-                                    painter = painterResource(id = when {
-                                        isDarkTheme -> R.drawable.ic_baseline_search_white_24
-                                        else -> R.drawable.ic_baseline_search_black_24
-                                    }), contentDescription = null)
+                                    painter = painterResource(
+                                        id = when {
+                                            isDarkTheme -> R.drawable.ic_baseline_search_white_24
+                                            else -> R.drawable.ic_baseline_search_black_24
+                                        }
+                                    ),
+                                    contentDescription = null
+                                )
                             },
                             placeholder = {
                                 Text("Search")
                             },
-                            onValueChange = onSearchTextChanged)
+                            onValueChange = onSearchTextChanged
+                        )
 
                         CategoryText(text = "FAVORITE COLLECTIONS")
 
@@ -337,7 +374,7 @@ fun HomeScreen(
                     val maxHeight = placeables.fastMaxBy { it.height }?.height ?: 0
 
                     layout(maxWidth, maxHeight) {
-                        var currentOffset = -maxWidth/2
+                        var currentOffset = -maxWidth / 2
 
                         placeables.fastForEach { placeable ->
                             placeable.place(x = currentOffset, y = 0)
@@ -388,10 +425,12 @@ fun HomeScreen(
                     content = {
                         Image(
                             modifier = Modifier.size(24.dp),
-                            painter = painterResource(id = when {
-                                isDarkTheme -> R.drawable.ic_baseline_play_arrow_24_dark
-                                else -> R.drawable.ic_baseline_play_arrow_24_light
-                            }),
+                            painter = painterResource(
+                                id = when {
+                                    isDarkTheme -> R.drawable.ic_baseline_play_arrow_24_dark
+                                    else -> R.drawable.ic_baseline_play_arrow_24_light
+                                }
+                            ),
                             contentDescription = "Play",
                         )
                     }

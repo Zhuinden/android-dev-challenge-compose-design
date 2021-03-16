@@ -27,9 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.ResourceFont
-import androidx.compose.ui.text.style.TextGeometricTransform
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androiddevchallenge.R
@@ -38,7 +35,6 @@ val shapes = Shapes(
     small = RoundedCornerShape(4.dp),
     medium = RoundedCornerShape(16.dp),
 )
-
 
 val gray900 = Color(0xFF333333)
 val taupe100 = Color(0xFFF0EAE2)
@@ -61,7 +57,6 @@ val colorHomeScreenTextFieldIndicatorLight = Color(0xFF636362)
 val colorHomeScreenCardBackgroundLight = Color(0xFFFDFCFB)
 val colorHomeScreenCardBackgroundDark = Color(0xFF535353)
 val colorHomeScreenFabCircleBackgroundLight = Color(0xFF323232)
-
 
 val typography = Typography(
     h1 = TextStyle(
@@ -110,7 +105,6 @@ val typography = Typography(
         fontFeatureSettings = "c2sc, smcp",
     ),
 )
-
 
 private val LightColorPalette = lightColors(
     primary = gray900,
