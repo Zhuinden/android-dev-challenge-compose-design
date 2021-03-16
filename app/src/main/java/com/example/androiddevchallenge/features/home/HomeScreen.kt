@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -171,6 +172,7 @@ fun HomeScreen(
         Row(
             modifier = Modifier
                 .defaultMinSize(minHeight = 112.dp)
+                .offset(x = -8.dp) // counteract item padding
                 .horizontalScroll(rowScrollState),
         ) {
             imageDatas.fastForEach { imageData ->
