@@ -28,6 +28,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -326,6 +327,7 @@ fun HomeScreen(
 
             Column {
                 FloatingActionButton(
+                    elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp),
                     modifier = Modifier.size(56.dp),
                     backgroundColor = when {
                         isDarkTheme -> white
