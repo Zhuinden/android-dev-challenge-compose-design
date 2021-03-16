@@ -40,6 +40,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -199,9 +201,7 @@ fun HomeScreen(
         text: String,
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .fillMaxHeight(),
+            modifier = Modifier.fillMaxHeight().fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -306,26 +306,39 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.BottomCenter,
         ) {
-            Row(
+            Layout(
                 modifier = Modifier
-                    .height(56.dp)
-                    .fillMaxWidth()
-                    .offset(x = -24.dp) /* why is this needed? */,
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BottomNavItem(
-                    indicatorImageLight = R.drawable.ic_baseline_local_florist_selected_light_24,
-                    indicatorImageDark = R.drawable.ic_baseline_local_florist_selected_dark_24,
-                    text = "HOME"
-                )
+                .height(56.dp)
+                .fillMaxWidth(),
+                measurePolicy = MeasurePolicy { measurables, constraints ->
+                    val placeables = measurables.fastMap { it.measure(constraints) }
+                    val maxWidth = placeables.fastMaxBy { it.width }?.width ?: 0
+                    val maxHeight = placeables.fastMaxBy { it.height }?.height ?: 0
 
-                BottomNavItem(
-                    indicatorImageLight = R.drawable.ic_baseline_face_unselected_light_24,
-                    indicatorImageDark = R.drawable.ic_baseline_face_unselected_dark_24,
-                    text = "PROFILE"
-                )
-            }
+                    var correctedOffset = -maxWidth/4
+
+                    layout(maxWidth, maxHeight) {
+                        placeables.fastForEach { placeable ->
+                            placeable.place(x = correctedOffset, y = 0)
+
+                            correctedOffset += maxWidth / 2
+                        }
+                    }
+                },
+                content = {
+                    BottomNavItem(
+                        indicatorImageLight = R.drawable.ic_baseline_local_florist_selected_light_24,
+                        indicatorImageDark = R.drawable.ic_baseline_local_florist_selected_dark_24,
+                        text = "HOME"
+                    )
+
+                    BottomNavItem(
+                        indicatorImageLight = R.drawable.ic_baseline_face_unselected_light_24,
+                        indicatorImageDark = R.drawable.ic_baseline_face_unselected_dark_24,
+                        text = "PROFILE"
+                    )
+                }
+            )
 
             Column {
                 FloatingActionButton(
