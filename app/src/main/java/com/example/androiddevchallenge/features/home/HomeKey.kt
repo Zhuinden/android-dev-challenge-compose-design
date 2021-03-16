@@ -35,7 +35,10 @@ data class HomeKey(private val noArgsPlaceholder: String = ""): ComposeKey() {
             imagesCardRows = listOf(
                 "ALIGN YOUR BODY" to listOf(ImageData.INVERSIONS, ImageData.QUICK_YOGA, ImageData.STRETCHING, ImageData.TABATA, ImageData.HIIT, ImageData.PRE_NATAL_YOGA),
                 "ALIGN YOUR MIND" to listOf(ImageData.MEDITATE, ImageData.WITH_KIDS, ImageData.AROMATHERAPY, ImageData.ON_THE_GO, ImageData.WITH_PETS, ImageData.HIGH_STRESS)
-            )
+            ),
+            selectedTab = HomeTabs.HOME,
+            onSelectedTabChanged = {},
+            onPlayButtonClicked = {},
         )
     }
 }

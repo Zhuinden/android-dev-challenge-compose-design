@@ -5,9 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.InteractionSource
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +31,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,6 +63,11 @@ import com.example.androiddevchallenge.data.ImageData
 import dev.chrisbanes.accompanist.coil.CoilImage
 import okhttp3.HttpUrl
 
+enum class HomeTabs {
+    HOME,
+    PROFILE,
+}
+
 @Composable
 fun HomeScreen(
     searchText: String,
@@ -74,6 +75,9 @@ fun HomeScreen(
     imagesGridFirstRow: List<ImageData>,
     imagesGridSecondRow: List<ImageData>,
     imagesCardRows: List<Pair<String, List<ImageData>>>,
+    selectedTab: HomeTabs,
+    onSelectedTabChanged: (HomeTabs) -> Unit,
+    onPlayButtonClicked: () -> Unit,
     isDarkTheme: Boolean = isSystemInDarkTheme(),
 ) {
     @Composable
@@ -196,18 +200,33 @@ fun HomeScreen(
 
     @Composable
     fun BottomNavItem(
-        @DrawableRes indicatorImageLight: Int,
-        @DrawableRes indicatorImageDark: Int,
+        @DrawableRes selectedIndicatorImageLight: Int,
+        @DrawableRes selectedIndicatorImageDark: Int,
+        @DrawableRes unselectedIndicatorImageLight: Int,
+        @DrawableRes unselectedIndicatorImageDark: Int,
+        isSelected: Boolean,
         text: String,
+        onClick: () -> Unit,
     ) {
         Column(
-            modifier = Modifier.fillMaxHeight().fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()
+                .clickable {
+                    onClick()
+                },
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(modifier = Modifier.size(18.dp), painter = painterResource(when {
-                isDarkTheme -> indicatorImageDark
-                else -> indicatorImageLight
+                isDarkTheme -> when {
+                    isSelected -> selectedIndicatorImageDark
+                    else -> unselectedIndicatorImageDark
+                }
+                else -> when {
+                    isSelected -> selectedIndicatorImageLight
+                    else -> unselectedIndicatorImageLight
+                }
             }), contentDescription = null)
 
             Text(
@@ -308,34 +327,48 @@ fun HomeScreen(
         ) {
             Layout(
                 modifier = Modifier
-                .height(56.dp)
-                .fillMaxWidth(),
+                    .height(56.dp)
+                    .fillMaxWidth(),
                 measurePolicy = MeasurePolicy { measurables, constraints ->
-                    val placeables = measurables.fastMap { it.measure(constraints) }
+                    val halvedConstraints = constraints.copy(maxWidth = constraints.maxWidth / 2, minWidth = constraints.maxWidth / 2)
+
+                    val placeables = measurables.fastMap { it.measure(halvedConstraints) }
                     val maxWidth = placeables.fastMaxBy { it.width }?.width ?: 0
                     val maxHeight = placeables.fastMaxBy { it.height }?.height ?: 0
 
-                    var correctedOffset = -maxWidth/4
-
                     layout(maxWidth, maxHeight) {
-                        placeables.fastForEach { placeable ->
-                            placeable.place(x = correctedOffset, y = 0)
+                        var currentOffset = -maxWidth/2
 
-                            correctedOffset += maxWidth / 2
+                        placeables.fastForEach { placeable ->
+                            placeable.place(x = currentOffset, y = 0)
+
+                            currentOffset += maxWidth
                         }
                     }
                 },
                 content = {
                     BottomNavItem(
-                        indicatorImageLight = R.drawable.ic_baseline_local_florist_selected_light_24,
-                        indicatorImageDark = R.drawable.ic_baseline_local_florist_selected_dark_24,
-                        text = "HOME"
+                        selectedIndicatorImageLight = R.drawable.ic_baseline_local_florist_selected_light_24,
+                        selectedIndicatorImageDark = R.drawable.ic_baseline_local_florist_selected_dark_24,
+                        unselectedIndicatorImageLight = R.drawable.ic_baseline_local_florist_unselected_light_24,
+                        unselectedIndicatorImageDark = R.drawable.ic_baseline_local_florist_unselected_dark_24,
+                        text = "HOME",
+                        isSelected = HomeTabs.HOME == selectedTab,
+                        onClick = {
+                            onSelectedTabChanged(HomeTabs.HOME)
+                        }
                     )
 
                     BottomNavItem(
-                        indicatorImageLight = R.drawable.ic_baseline_face_unselected_light_24,
-                        indicatorImageDark = R.drawable.ic_baseline_face_unselected_dark_24,
-                        text = "PROFILE"
+                        selectedIndicatorImageLight = R.drawable.ic_baseline_face_unselected_light_24,
+                        selectedIndicatorImageDark = R.drawable.ic_baseline_face_unselected_dark_24,
+                        unselectedIndicatorImageLight = R.drawable.ic_baseline_face_unselected_light_24,
+                        unselectedIndicatorImageDark = R.drawable.ic_baseline_face_unselected_dark_24,
+                        text = "PROFILE",
+                        isSelected = HomeTabs.PROFILE == selectedTab,
+                        onClick = {
+                            onSelectedTabChanged(HomeTabs.PROFILE)
+                        }
                     )
                 }
             )
@@ -350,6 +383,7 @@ fun HomeScreen(
                     },
                     shape = CircleShape,
                     onClick = {
+                        onPlayButtonClicked()
                     },
                     content = {
                         Image(
@@ -381,6 +415,9 @@ fun HomeScreenPreview() {
             "ALIGN YOUR BODY" to listOf(ImageData.INVERSIONS, ImageData.QUICK_YOGA, ImageData.STRETCHING, ImageData.TABATA, ImageData.HIIT, ImageData.PRE_NATAL_YOGA),
             "ALIGN YOUR MIND" to listOf(ImageData.MEDITATE, ImageData.WITH_KIDS, ImageData.AROMATHERAPY, ImageData.ON_THE_GO, ImageData.WITH_PETS, ImageData.HIGH_STRESS)
         ),
+        selectedTab = HomeTabs.HOME,
+        onSelectedTabChanged = {},
+        onPlayButtonClicked = {},
         isDarkTheme = false,
     )
 }
@@ -397,6 +434,9 @@ fun HomeScreenDarkPreview() {
             "ALIGN YOUR BODY" to listOf(ImageData.INVERSIONS, ImageData.QUICK_YOGA, ImageData.STRETCHING, ImageData.TABATA, ImageData.HIIT, ImageData.PRE_NATAL_YOGA),
             "ALIGN YOUR MIND" to listOf(ImageData.MEDITATE, ImageData.WITH_KIDS, ImageData.AROMATHERAPY, ImageData.ON_THE_GO, ImageData.WITH_PETS, ImageData.HIGH_STRESS)
         ),
+        selectedTab = HomeTabs.HOME,
+        onSelectedTabChanged = {},
+        onPlayButtonClicked = {},
         isDarkTheme = true,
     )
 }
