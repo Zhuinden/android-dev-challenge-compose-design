@@ -2,6 +2,9 @@ package com.example.androiddevchallenge.features.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,12 +16,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Shapes
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.*
 import coil.request.ImageRequest
 import coil.size.PixelSize
 import com.example.androiddevchallenge.R
@@ -42,8 +43,6 @@ import com.example.androiddevchallenge.core.theme.colorHomeScreenCardBackgroundD
 import com.example.androiddevchallenge.core.theme.colorHomeScreenCardBackgroundLight
 import com.example.androiddevchallenge.core.theme.colorHomeScreenTextFieldBackgroundDark
 import com.example.androiddevchallenge.core.theme.colorHomeScreenTextFieldIndicatorLight
-import com.example.androiddevchallenge.core.theme.colorLoginScreenTextFieldBackgroundDark
-import com.example.androiddevchallenge.core.theme.colorLoginScreenTextFieldIndicatorLight
 import com.example.androiddevchallenge.core.theme.gray800
 import com.example.androiddevchallenge.core.theme.taupe100
 import com.example.androiddevchallenge.core.theme.taupe800
@@ -52,7 +51,6 @@ import com.example.androiddevchallenge.core.theme.white800
 import com.example.androiddevchallenge.data.ImageData
 import dev.chrisbanes.accompanist.coil.CoilImage
 import okhttp3.HttpUrl
-import java.lang.IllegalArgumentException
 
 @Composable
 fun HomeScreen(
@@ -163,23 +161,26 @@ fun HomeScreen(
                         }
                     }
 
-                    LazyRow(content = {
-                        val firstRow = arrayOf(ImageData.SHORT_MANTRAS, ImageData.STRESS_AND_ANXIETY, ImageData.OVERWHELMED)
+                    val scrollState = rememberScrollState()
+                    Column(modifier = Modifier.horizontalScroll(scrollState)) {
+                        Row {
+                            val row = listOf(ImageData.SHORT_MANTRAS, ImageData.STRESS_AND_ANXIETY, ImageData.OVERWHELMED)
 
-                        items(count = firstRow.size, key = { index -> firstRow[index].title }) { index ->
-                            GridCard(firstRow[index])
+                            row.fastForEach { imageData ->
+                                GridCard(imageData)
+                            }
                         }
-                    })
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
-                    LazyRow(content = {
-                        val firstRow = arrayOf(ImageData.NATURE_MEDITATIONS, ImageData.SELF_MASSAGE, ImageData.NIGHTLY_WIND_DOWN)
+                        Row {
+                            val row = listOf(ImageData.NATURE_MEDITATIONS, ImageData.SELF_MASSAGE, ImageData.NIGHTLY_WIND_DOWN)
 
-                        items(count = firstRow.size, key = { index -> firstRow[index].title }) { index ->
-                            GridCard(firstRow[index])
+                            row.fastForEach { imageData ->
+                                GridCard(imageData)
+                            }
                         }
-                    })
+                    }
                 }
             }
         }
